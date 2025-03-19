@@ -7,6 +7,7 @@ export interface GameContextProps {
   gameWon: boolean
   history?: string[][]
   gameReset: boolean
-  lifeCount: number
-  verify:boolean
+  lifeCount?: number
+  gameLost: boolean
+  verify: boolean
 }

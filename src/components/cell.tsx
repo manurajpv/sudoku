@@ -42,7 +42,7 @@ function Cell({
         (initial !== '-' ? ' bg-gray-400' : '') +
         ((index % 9) % 3 === 2 ? ' border-r-2' : ' border-r') +
         (Math.floor(index / 9) % 3 === 2 ? ' border-b-2' : ' border-b') +
-        ((verify && value !==correct && initial ==='-') ? ' bg-red-500' : '')
+        ((verify && value !== correct && initial ==='-') ? ' bg-red-500' : '')
       }
       value={value !== '-' ? value : ''} // Display empty string for empty cells
       onKeyDown={handleKeyDown}

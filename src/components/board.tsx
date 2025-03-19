@@ -15,11 +15,12 @@ const Board = React.memo(() => {
       const newBoard = game.board[0].split('');
       setBoard(newBoard);
       setHistory([newBoard]);
+      console.log(history)
     }
-  }, [game?.board]);
+  }, [game?.board[0]]);
   
   const updateCell = (index: number, value: string) => {
-    if (value.match(/^[1-9]$/)) {
+    if (value.match(/^[1-9]$/) || value === '-') {
       const updatedBoard = [...board];
       updatedBoard[index] = value;
 
@@ -42,7 +43,6 @@ const Board = React.memo(() => {
       ))}
     </div>
   );
-})
-
+});
 
 export default Board;
