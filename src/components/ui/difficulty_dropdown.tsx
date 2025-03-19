@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Check, ChevronsUpDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
@@ -15,7 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from './button'
-
+import { GameContext } from '@/context/gameContext'
 const difficulties = [
   {
     value: "easy",
@@ -33,6 +33,10 @@ const difficulties = [
 function DifficultyDropdown({ setDifficulty }: { setDifficulty: React.Dispatch<React.SetStateAction<"easy" | "medium" | "hard">> }) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState('easy')
+  const game = useContext(GameContext)
+  useEffect(() => {
+    game.difficulty = value as "easy" | "medium" | "hard"
+  }, [value])
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
