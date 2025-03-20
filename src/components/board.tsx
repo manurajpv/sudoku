@@ -1,31 +1,33 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Cell from './cell';
 import { GameContext } from '@/context/gameContext';
+import { GameContextType } from '@/types/types';
 
 const Board = React.memo(() => {
-  const game = useContext(GameContext);
+  const game = useContext<GameContextType | undefined>(GameContext);
 
-  // Initialize board and solution from context
+  if (!game) {
+    throw new Error('GameContext is undefined. Ensure the context provider is set.');
+  }
+
   const [board, setBoard] = useState<string[]>(game?.board[0]?.split('') || []);
   const solution = game?.solution[0]?.split('') || [];
-  const [history, setHistory] = useState<string[][]>([board]);
+  // const [history, setHistory] = useState<string[][]>([board]);
 
   useEffect(() => {
     if (game?.board[0]) {
       const newBoard = game.board[0].split('');
       setBoard(newBoard);
-      setHistory([newBoard]);
-      console.log(history)
+      // setHistory([newBoard]);
     }
-  }, [game?.board[0]]);
-  
+  }, [game?.board]);
+
   const updateCell = (index: number, value: string) => {
-    if (value.match(/^[1-9]$/) || value === '-') {
+    if (!game?.verify && (value.match(/^[1-9]$/) || value === '-')) {
       const updatedBoard = [...board];
       updatedBoard[index] = value;
-
       setBoard(updatedBoard);
-      setHistory((prevHistory) => [...prevHistory, updatedBoard]);
+      // setHistory((prevHistory) => [...prevHistory, updatedBoard]);
     }
   };
 

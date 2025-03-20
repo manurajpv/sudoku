@@ -18,7 +18,6 @@ function App() {
     setPuzzle(puzzle);
     setSolution(solution);
     setGameLost(false);
-    console.log(puzzle, solution)
   };
   const verifyBoard = () => {
     setVerify(true);

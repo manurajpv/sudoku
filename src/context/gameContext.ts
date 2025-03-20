@@ -1,8 +1,8 @@
-import { GameContextProps } from "@/types/types";
+import { GameContextType } from "@/types/types";
 import React from "react";
 
 
-export const GameContext = React.createContext<GameContextProps | undefined>(undefined);
+export const GameContext = React.createContext<GameContextType | undefined>(undefined);
 
 // {
 //     difficulty: 'easy',

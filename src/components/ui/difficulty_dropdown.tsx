@@ -34,6 +34,9 @@ function DifficultyDropdown({ setDifficulty }: { setDifficulty: React.Dispatch<R
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState('easy')
   const game = useContext(GameContext)
+  if (!game) {
+    throw new Error('GameContext is undefined. Ensure the context provider is set.');
+  }
   useEffect(() => {
     game.difficulty = value as "easy" | "medium" | "hard"
   }, [value])
