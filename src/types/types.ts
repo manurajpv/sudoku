@@ -5,6 +5,7 @@ export interface GameContextType {
   board: string[];
   solution: string[];
   gameWon: boolean;
+  setGameWon: (won: boolean) => void;
   gameReset: boolean;
   history: string[][];
   lifeCount: number;

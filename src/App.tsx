@@ -13,25 +13,27 @@ function App() {
   const [verify, setVerify] = useState<boolean>(false);
   const [lifeCount, setLifeCount] = useState<number>(3);
   const [gameLost, setGameLost] = useState<boolean>(false);
+  const [gameWon, setGameWon] = useState<boolean>(false);
   const handleStart = () => {
     const { puzzle, solution } = generateBoard(difficulty);
     setPuzzle(puzzle);
     setSolution(solution);
     setGameLost(false);
+    console.log(solution)
+    setLifeCount(3)
   };
   const verifyBoard = () => {
-    setVerify(true);
-    setLifeCount(lifeCount - 1);
-    setTimeout(() => {
-      setVerify(false);
-    }, 5000);
-  }
+    if (!verify) {  // Add check to prevent multiple verifications
+      setVerify(true);
+      setLifeCount(prev => prev - 1);
+      setTimeout(() => {
+        setVerify(false);
+      }, 5000);
+    }
+  };
   useEffect(() => {
     if (lifeCount === 0) {
-      setPuzzle('');
-      setGameLost(true)
-      setSolution('');
-      setLifeCount(3);
+      console.log("Out of lives")
     }
   }, [lifeCount])
   return (
@@ -49,12 +51,13 @@ function App() {
           startDate: Date.now(),
           board: [puzzle],
           solution: [solution],
-          gameWon: false,
+          gameWon: gameWon,
           gameReset: false,
           history: [],
           lifeCount: lifeCount,
           verify: verify,
-          gameLost: gameLost
+          gameLost: gameLost,
+          setGameWon: setGameWon
         }}
       >
         <section className="w-full p-4 flex flex-col items-center gap-4">
@@ -86,8 +89,15 @@ function App() {
         )}
         {gameLost && (
           <>
+            <div className='flex justify-center h-48 items-center'>
+              <h1 className='text-2xl  bg-red-500 px-4 py-2 rounded-md font-semibold text-white my-4'>Game Over. Try Again?</h1>
+            </div>
+          </>
+        )}
+        {gameWon && (
+          <>
             <div className='flex justify-center'>
-              <h1 className='text-2xl font-semibold text-red-500 my-4'> Game Over</h1>
+              <h1 className='text-2xl bg-green-500  px-4 py-2 rounded-md font-semibold text-white my-4'> Yaay.. You Won!!!</h1>
             </div>
           </>
         )}
