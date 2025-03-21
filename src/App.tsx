@@ -6,6 +6,7 @@ import DifficultyDropdown from './components/ui/difficulty_dropdown';
 import { generateBoard } from './lib/utils';
 import { Heart, RefreshCw } from 'lucide-react';
 import logo from "./assets/game.svg"
+import { useToast } from './hooks/use-toast';
 function App() {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [puzzle, setPuzzle] = useState<string>('');
@@ -14,6 +15,7 @@ function App() {
   const [lifeCount, setLifeCount] = useState<number>(3);
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [gameWon, setGameWon] = useState<boolean>(false);
+  const { toast } = useToast()
   const handleStart = () => {
     const { puzzle, solution } = generateBoard(difficulty);
     setPuzzle(puzzle);
@@ -23,18 +25,22 @@ function App() {
   };
   const verifyBoard = () => {
     if (!verify) {  // Add check to prevent multiple verifications
-      setVerify(true);
-      setLifeCount(prev => prev - 1);
-      setTimeout(() => {
-        setVerify(false);
-      }, 5000);
+      if (lifeCount > 0) {
+        setVerify(true);
+        setLifeCount(prev => prev - 1);
+        setTimeout(() => {
+          setVerify(false);
+        }, 3000);
+      }
     }
   };
   useEffect(() => {
-    if (lifeCount === 0) {
-      console.log("Out of lives")
+    if (lifeCount === 0 && verify) {
+      toast({
+        description: "Sorry, You are out of lives.",
+      })
     }
-  }, [lifeCount])
+  }, [lifeCount, verify])
   return (
     <main className="w-full h-full">
       <header className="w-full text-gray-950 h-20 flex items-center px-4">
