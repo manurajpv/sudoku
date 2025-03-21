@@ -19,7 +19,6 @@ function App() {
     setPuzzle(puzzle);
     setSolution(solution);
     setGameLost(false);
-    console.log(solution)
     setLifeCount(3)
   };
   const verifyBoard = () => {

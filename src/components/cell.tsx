@@ -39,9 +39,10 @@ const Cell = React.memo(({ value, index, setBoardVal, correct, initial }: CellPr
 
   return (
     <input
-      type="text"
+      type="number"
       maxLength={1}
       className={`
+        [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none
         flex items-center justify-center text-center border-slate-800 border-solid w-full h-full
         ${cellBackground}
         ${(index % 9) % 3 === 2 ? 'border-r-2' : 'border-r'}
