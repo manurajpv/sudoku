@@ -27,7 +27,7 @@ const Cell = React.memo(({ value, index, setBoardVal, correct, initial }: CellPr
   }, [initial, game.verify, value, correct]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (initial === '-' && !game.verify) {
+    if (initial === '-' && !game.verify && !game.gameLost) {
       const key = e.key;
       if (key.match(/^[1-9]$/)) {
         setBoardVal(key);

@@ -8,6 +8,7 @@ import { Heart, RefreshCw } from 'lucide-react';
 import logo from "./assets/game.svg"
 import { useToast } from './hooks/use-toast';
 import { ConfettiFireworks } from './components/ui/win-confetti';
+import { useTimer } from 'react-timer-hook';
 import { motion } from 'motion/react';
 function App() {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
@@ -17,8 +18,22 @@ function App() {
   const [lifeCount, setLifeCount] = useState<number>(3);
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [gameWon, setGameWon] = useState<boolean>(false);
+  const [timer, setTimer] = useState<Date>(new Date());
   const { toast } = useToast()
+
   const handleStart = () => {
+    const time = new Date();
+    switch (difficulty) {
+      case 'hard':
+        time.setSeconds(time.getSeconds() + 900);
+        break;
+      case 'medium':
+        time.setSeconds(time.getSeconds() + 600);
+        break;
+      case 'easy':
+        time.setSeconds(time.getSeconds() + 300);
+        break;
+    }
     setPuzzle('')
     const { puzzle, solution } = generateBoard(difficulty);
     setTimeout(() => {
@@ -28,6 +43,7 @@ function App() {
     setGameWon(false);
     setGameLost(false);
     setLifeCount(3)
+    setTimer(time)
   };
   const verifyBoard = () => {
     if (!verify && !gameWon) {  // Add check to prevent multiple verifications
@@ -87,6 +103,9 @@ function App() {
               <Button onClick={handleStart}>{(puzzle || solution) ? "Restart" : "Start Game"}</Button>
             </div>
           </div>
+          {puzzle && solution && (<div>
+            <CountDown expiryTimestamp={timer} setGameLost={setGameLost} puzzle={puzzle} />
+          </div>)}
         </section>
         <section>
           {puzzle && (
@@ -141,4 +160,19 @@ function App() {
   );
 }
 
+function CountDown({ expiryTimestamp, setGameLost, puzzle }: { expiryTimestamp: Date, setGameLost: React.Dispatch<React.SetStateAction<boolean>>, puzzle: string }) {
+  const {
+    seconds,
+    minutes
+  } = useTimer({ expiryTimestamp, onExpire: () => { if (puzzle) setGameLost(true) }, interval: 20 });
+
+
+  return (
+    <div className='text-center'>
+      <div className='text-3xl text-semibold'>
+        <span>{minutes.toLocaleString().length < 2 ? "0" + minutes.toLocaleString() : minutes}</span>:<span>{seconds.toLocaleString().length < 2 ? "0" + seconds.toLocaleString() : seconds}</span>
+      </div>
+    </div>
+  );
+}
 export default App;
