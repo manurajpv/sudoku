@@ -7,6 +7,7 @@ import { generateBoard } from './lib/utils';
 import { Heart, RefreshCw } from 'lucide-react';
 import logo from "./assets/game.svg"
 import { useToast } from './hooks/use-toast';
+import { ConfettiFireworks } from './components/ui/win-confetti';
 function App() {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [puzzle, setPuzzle] = useState<string>('');
@@ -106,6 +107,7 @@ function App() {
             </div>
           </>
         )}
+        <ConfettiFireworks gameWon={gameWon} />
       </GameContext.Provider>
     </main>
   );
