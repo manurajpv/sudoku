@@ -19,9 +19,9 @@ const Cell = React.memo(({ value, index, setBoardVal, correct, initial }: CellPr
 
   // Calculate background color without affecting the value
   const cellBackground = useMemo(() => {
-    if (initial !== '-') return 'bg-gray-400';
+    if (initial !== '-') return 'bg-[#E1DEE3]';
     if (game.verify) {
-      if (value !== correct) return 'bg-red-500';
+      if (value !== correct) return 'bg-red-400';
     }
     return '';
   }, [initial, game.verify, value, correct]);
