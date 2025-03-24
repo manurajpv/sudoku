@@ -8,6 +8,7 @@ import { Heart, RefreshCw } from 'lucide-react';
 import logo from "./assets/game.svg"
 import { useToast } from './hooks/use-toast';
 import { ConfettiFireworks } from './components/ui/win-confetti';
+import { motion } from 'motion/react';
 function App() {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [puzzle, setPuzzle] = useState<string>('');
@@ -18,14 +19,17 @@ function App() {
   const [gameWon, setGameWon] = useState<boolean>(false);
   const { toast } = useToast()
   const handleStart = () => {
+    setPuzzle('')
     const { puzzle, solution } = generateBoard(difficulty);
-    setPuzzle(puzzle);
+    setTimeout(() => {
+      setPuzzle(puzzle);
+    }, 100);
     setSolution(solution);
     setGameLost(false);
     setLifeCount(3)
   };
   const verifyBoard = () => {
-    if (!verify) {  // Add check to prevent multiple verifications
+    if (!verify && !gameWon) {  // Add check to prevent multiple verifications
       if (lifeCount > 0) {
         setVerify(true);
         setLifeCount(prev => prev - 1);
@@ -44,12 +48,19 @@ function App() {
   }, [lifeCount, verify])
   return (
     <main className="w-full h-full">
-      <header className="w-full text-gray-950 h-20 flex items-center px-4">
-        <div className='flex items-center gap-2 px-2'>
-          <img width={36} src={logo} alt="Sudoku Logo" />
-          <span className='font-bold text-2xl'>Sudoku</span>
-        </div>
-      </header>
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+
+        <header className="w-full text-gray-950 h-20 flex items-center px-4">
+          <div className='flex items-center gap-2 px-2'>
+            <img width={36} src={logo} alt="Sudoku Logo" />
+            <span className='font-bold text-2xl'>Sudoku</span>
+          </div>
+        </header>
+      </motion.div>
       <GameContext.Provider
         value={{
           difficulty,
@@ -72,42 +83,58 @@ function App() {
               <DifficultyDropdown setDifficulty={setDifficulty} />
             </div>
             <div>
-              <Button onClick={handleStart}>{(puzzle && solution) ? "Restart" : "Start Game"}</Button>
+              <Button onClick={handleStart}>{(puzzle || solution) ? "Restart" : "Start Game"}</Button>
             </div>
           </div>
         </section>
-        {puzzle && (
-          <>
-            <div className="flex justify-center">
-              <Board />
-            </div>
-            <div className="flex justify-center items-center gap-4">
-              <div className='mx-2 flex flex-row gap-1'>
-                {lifeCount}
-                <Heart />
+        <section>
+          {puzzle && (
+            <>
+              <div className="flex justify-center">
+                <Board />
               </div>
-              <Button
-                onClick={verifyBoard}
-                variant="secondary"
-              >Check Solution<RefreshCw /></Button>
-            </div>
-          </>
-        )}
-        {gameLost && (
-          <>
-            <div className='flex justify-center h-48 items-center'>
-              <h1 className='text-2xl  bg-red-500 px-4 py-2 rounded-md font-semibold text-white my-4'>Game Over. Try Again?</h1>
-            </div>
-          </>
-        )}
-        {gameWon && (
-          <>
-            <div className='flex justify-center'>
-              <h1 className='text-2xl bg-green-500  px-4 py-2 rounded-md font-semibold text-white my-4'> Yaay.. You Won!!!</h1>
-            </div>
-          </>
-        )}
-        <ConfettiFireworks gameWon={gameWon} />
+              <div className="flex justify-center items-center gap-4">
+                <div className='mx-2 flex flex-row gap-1'>
+                  {lifeCount}
+                  <Heart />
+                </div>
+                <Button
+                  onClick={verifyBoard}
+                  variant="secondary"
+                >Check Solution<RefreshCw /></Button>
+              </div>
+            </>
+          )}
+          {gameLost && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.4,
+                scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+              }}
+            >
+              <div className='flex justify-center h-48 items-center'>
+                <h1 className='text-2xl  bg-red-500 px-4 py-2 rounded-md font-semibold text-white my-4'>Game Over. Try Again?</h1>
+              </div>
+            </motion.div>
+          )}
+          {gameWon && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.4,
+                scale: { type: "spring", visualDuration: 0.4, bounce: 0.5 },
+              }}
+            >
+              <div className='flex justify-center'>
+                <h1 className='text-2xl bg-green-500  px-4 py-2 rounded-md font-semibold text-white my-4'> Yaay.. You Won!!!</h1>
+              </div>
+            </motion.div>
+          )}
+          <ConfettiFireworks gameWon={gameWon} />
+        </section>
       </GameContext.Provider>
     </main>
   );
