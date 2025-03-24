@@ -25,6 +25,7 @@ function App() {
       setPuzzle(puzzle);
     }, 100);
     setSolution(solution);
+    setGameWon(false);
     setGameLost(false);
     setLifeCount(3)
   };
