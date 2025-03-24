@@ -75,7 +75,7 @@ function App() {
           <div className='flex items-center px-2 justify-between w-full'>
             <div className='flex items-center gap-2'>
               <img width={36} src={logo} alt="Sudoku Logo" />
-              <span className='font-bold text-2xl'>Sudoku</span>
+              <span className='font-bold text-2xl text-foreground'>Sudoku</span>
             </div>
             <div>
               <Themetoggle />
