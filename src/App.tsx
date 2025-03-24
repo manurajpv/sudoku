@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Board from './components/board';
 import { Button } from './components/ui/button';
 import { GameContext } from './context/gameContext';
@@ -11,6 +11,7 @@ import { ConfettiFireworks } from './components/ui/win-confetti';
 import { useTimer } from 'react-timer-hook';
 import { motion } from 'motion/react';
 import Themetoggle from './components/ui/theme-toggle';
+import HighScores from './components/highscore';
 function App() {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [puzzle, setPuzzle] = useState<string>('');
@@ -20,6 +21,7 @@ function App() {
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [gameWon, setGameWon] = useState<boolean>(false);
   const [timer, setTimer] = useState<Date>(new Date());
+  const [viewScores, setViewScores] = useState<boolean>(false)
   const { toast } = useToast()
 
   const handleStart = () => {
@@ -77,7 +79,8 @@ function App() {
               <img width={36} src={logo} alt="Sudoku Logo" />
               <span className='font-bold text-2xl text-foreground'>Sudoku</span>
             </div>
-            <div>
+            <div className='flex gap-2'>
+              <Button variant={"secondary"} onClick={() => { setViewScores(!viewScores) }}>{viewScores ? "Play Game" : "Previous Scores"}</Button>
               <Themetoggle />
             </div>
           </div>
@@ -99,7 +102,7 @@ function App() {
           setGameWon: setGameWon
         }}
       >
-        <section className="w-full p-4 flex flex-col items-center gap-4">
+        {!viewScores && <section className="w-full p-4 flex flex-col items-center gap-4">
           <div className="flex gap-4">
             <div className="flex gap-2 items-center">
               <DifficultyDropdown setDifficulty={setDifficulty} />
@@ -111,9 +114,9 @@ function App() {
           {puzzle && solution && (<div>
             <CountDown expiryTimestamp={timer} setGameLost={setGameLost} puzzle={puzzle} />
           </div>)}
-        </section>
+        </section>}
         <section>
-          {puzzle && (
+          {puzzle && !viewScores && (
             <>
               <div className="flex justify-center">
                 <Board />
@@ -161,6 +164,11 @@ function App() {
           <ConfettiFireworks gameWon={gameWon} />
         </section>
       </GameContext.Provider>
+      {viewScores && <div className='flex justify-center gap-4 mt-4'>
+        <div className='w-full lg:w-1/3 px-2'>
+          <HighScores />
+        </div>
+      </div>}
     </main>
   );
 }
@@ -171,9 +179,21 @@ function CountDown({ expiryTimestamp, setGameLost, puzzle }: { expiryTimestamp: 
     minutes
   } = useTimer({ expiryTimestamp, onExpire: () => { if (puzzle) setGameLost(true) }, interval: 20 });
 
+  const game = useContext(GameContext);
+  if (!game) {
+    throw new Error('GameContext is undefined. Ensure the context provider is set.');
+  }
+  useEffect(() => {
+    if (game.gameWon) {
+      let scores = JSON.parse(localStorage.getItem("sudoku-scores") || "[]");
+      const score = { difficulty: game.difficulty, time: `${minutes}:${seconds}` }
+      scores = [...scores, score]
+      localStorage.setItem("sudoku-scores", JSON.stringify(scores))
+    }
+  }, [game.gameWon])
 
   return (
-    <div className='text-center'>
+    <div className='text-center h-full'>
       <div className='text-3xl text-semibold'>
         <span>{minutes.toLocaleString().length < 2 ? "0" + minutes.toLocaleString() : minutes}</span>:<span>{seconds.toLocaleString().length < 2 ? "0" + seconds.toLocaleString() : seconds}</span>
       </div>
