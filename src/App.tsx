@@ -10,6 +10,7 @@ import { useToast } from './hooks/use-toast';
 import { ConfettiFireworks } from './components/ui/win-confetti';
 import { useTimer } from 'react-timer-hook';
 import { motion } from 'motion/react';
+import Themetoggle from './components/ui/theme-toggle';
 function App() {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [puzzle, setPuzzle] = useState<string>('');
@@ -70,11 +71,15 @@ function App() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
       >
-
         <header className="w-full text-gray-950 h-20 flex items-center px-4">
-          <div className='flex items-center gap-2 px-2'>
-            <img width={36} src={logo} alt="Sudoku Logo" />
-            <span className='font-bold text-2xl'>Sudoku</span>
+          <div className='flex items-center px-2 justify-between w-full'>
+            <div className='flex items-center gap-2'>
+              <img width={36} src={logo} alt="Sudoku Logo" />
+              <span className='font-bold text-2xl'>Sudoku</span>
+            </div>
+            <div>
+              <Themetoggle />
+            </div>
           </div>
         </header>
       </motion.div>
