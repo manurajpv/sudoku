@@ -8,7 +8,7 @@ import { Heart, RefreshCw } from 'lucide-react';
 import logo from "./assets/game.svg"
 import { useToast } from './hooks/use-toast';
 import { ConfettiFireworks } from './components/ui/win-confetti';
-import { useTimer } from 'react-timer-hook';
+import { useStopwatch } from 'react-timer-hook';
 import { motion } from 'motion/react';
 import Themetoggle from './components/ui/theme-toggle';
 import HighScores from './components/highscore';
@@ -20,23 +20,10 @@ function App() {
   const [lifeCount, setLifeCount] = useState<number>(3);
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [gameWon, setGameWon] = useState<boolean>(false);
-  const [timer, setTimer] = useState<Date>(new Date());
   const [viewScores, setViewScores] = useState<boolean>(false)
   const { toast } = useToast()
 
   const handleStart = () => {
-    const time = new Date();
-    switch (difficulty) {
-      case 'hard':
-        time.setSeconds(time.getSeconds() + 900);
-        break;
-      case 'medium':
-        time.setSeconds(time.getSeconds() + 600);
-        break;
-      case 'easy':
-        time.setSeconds(time.getSeconds() + 300);
-        break;
-    }
     setPuzzle('')
     const { puzzle, solution } = generateBoard(difficulty);
     setTimeout(() => {
@@ -46,7 +33,6 @@ function App() {
     setGameWon(false);
     setGameLost(false);
     setLifeCount(3)
-    setTimer(time)
   };
   const verifyBoard = () => {
     if (!verify && !gameWon) {  // Add check to prevent multiple verifications
@@ -112,7 +98,7 @@ function App() {
             </div>
           </div>
           {puzzle && solution && (<div>
-            <CountDown expiryTimestamp={timer} setGameLost={setGameLost} puzzle={puzzle} />
+            <CountDown />
           </div>)}
         </section>}
         <section>
@@ -173,11 +159,12 @@ function App() {
   );
 }
 
-function CountDown({ expiryTimestamp, setGameLost, puzzle }: { expiryTimestamp: Date, setGameLost: React.Dispatch<React.SetStateAction<boolean>>, puzzle: string }) {
+function CountDown() {
   const {
+    hours,
     seconds,
     minutes
-  } = useTimer({ expiryTimestamp, onExpire: () => { if (puzzle) setGameLost(true) }, interval: 20 });
+  } = useStopwatch({ autoStart: true, interval: 20 });
 
   const game = useContext(GameContext);
   if (!game) {
@@ -195,7 +182,7 @@ function CountDown({ expiryTimestamp, setGameLost, puzzle }: { expiryTimestamp: 
   return (
     <div className='text-center h-full'>
       <div className='text-3xl text-semibold'>
-        <span>{minutes.toLocaleString().length < 2 ? "0" + minutes.toLocaleString() : minutes}</span>:<span>{seconds.toLocaleString().length < 2 ? "0" + seconds.toLocaleString() : seconds}</span>
+        <span>{hours}</span>:<span>{minutes.toLocaleString().length < 2 ? "0" + minutes.toLocaleString() : minutes}</span>:<span>{seconds.toLocaleString().length < 2 ? "0" + seconds.toLocaleString() : seconds}</span>
       </div>
     </div>
   );
