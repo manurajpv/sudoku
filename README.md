@@ -2,6 +2,7 @@
 
 This is a Sudoku game built with **React**, **TypeScript**, and **Vite**. It provides a fun and interactive way to play Sudoku with features like difficulty selection, a timer, and score tracking.
 
+
 ## Features
 
 - **Difficulty Levels**: Choose between Easy, Medium, and Hard levels.
@@ -9,6 +10,8 @@ This is a Sudoku game built with **React**, **TypeScript**, and **Vite**. It pro
 - **Score Tracking**: View your previous game scores.
 - **Theme Toggle**: Switch between light and dark themes.
 - **Responsive Design**: Optimized for various screen sizes.
+
+#### Check out the [Demo](https://sudoku-bt9u.onrender.com/)
 
 ## Getting Started
 
