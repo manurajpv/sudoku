@@ -19,14 +19,14 @@ const Board = React.memo(() => {
 
   // Only update board when puzzle changes, not on verify
   useEffect(() => {
-    if (game.board[0] && !game.verify) {
+    if (game.board[0]) {
       const newBoard = game.board[0].split('');
       setBoard(newBoard);
     }
   }, [game.board[0]]); // Remove game.board dependency
 
   const updateCell = useCallback((index: number, value: string) => {
-    if (!game.verify && (value.match(/^[1-9]$/) || value === '-')) {
+    if ((value.match(/^[1-9]$/) || value === '-')) {
       const updatedBoard = [...board];
       updatedBoard[index] = value;
       setBoard(updatedBoard);
@@ -36,7 +36,33 @@ const Board = React.memo(() => {
       }
     }
   }, [board, solution, game]);
+  function getRandomUnfilledIndex(str: string) {
+    const dashIndexes = [];
 
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === '-') {
+        dashIndexes.push(i);
+      }
+    }
+
+    if (dashIndexes.length > 0) {
+      const randomIndex = Math.floor(Math.random() * dashIndexes.length);
+      console.log(randomIndex)
+      return dashIndexes[randomIndex];
+    }
+
+    return -1; 
+  }
+  useEffect(() => {
+    if(game.lifeCount> -1 && game.lifeCount<3){
+      const index = getRandomUnfilledIndex(board.join(''));
+      if (index !== -1) {
+        const updatedBoard = [...board];
+        updatedBoard[index] = solution[index];
+        setBoard(updatedBoard);
+      }
+    }
+  }, [game.lifeCount]);
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0 }}

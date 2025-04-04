@@ -20,14 +20,12 @@ const Cell = React.memo(({ value, index, setBoardVal, correct, initial }: CellPr
   // Calculate background color without affecting the value
   const cellBackground = useMemo(() => {
     if (initial !== '-') return 'bg-gray-400';
-    if (game.verify) {
-      if (value !== correct) return 'bg-red-400';
-    }
+    if (value !== correct && value !== '-') return 'bg-red-400';
     return '';
-  }, [initial, game.verify, value, correct]);
+  }, [initial, value, correct]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (initial === '-' && !game.verify && !game.gameLost) {
+    if (initial === '-' && !game.gameLost) {
       const key = e.key;
       if (key.match(/^[1-9]$/)) {
         setBoardVal(key);
@@ -50,7 +48,7 @@ const Cell = React.memo(({ value, index, setBoardVal, correct, initial }: CellPr
       `}
       value={value !== '-' ? value : ''}
       onKeyDown={handleKeyDown}
-      readOnly={initial !== '-' || game.verify}
+      readOnly={initial !== '-'}
     />
   );
 });

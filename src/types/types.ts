@@ -9,6 +9,5 @@ export interface GameContextType {
   gameReset: boolean;
   history: string[][];
   lifeCount: number;
-  verify: boolean;
   gameLost: boolean;
 }

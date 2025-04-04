@@ -4,7 +4,7 @@ import { Button } from './components/ui/button';
 import { GameContext } from './context/gameContext';
 import DifficultyDropdown from './components/ui/difficulty_dropdown';
 import { generateBoard } from './lib/utils';
-import { Heart, RefreshCw } from 'lucide-react';
+import { Heart, Lightbulb } from 'lucide-react';
 import logo from "./assets/game.svg"
 import { useToast } from './hooks/use-toast';
 import { ConfettiFireworks } from './components/ui/win-confetti';
@@ -16,7 +16,6 @@ function App() {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
   const [puzzle, setPuzzle] = useState<string>('');
   const [solution, setSolution] = useState<string>('');
-  const [verify, setVerify] = useState<boolean>(false);
   const [lifeCount, setLifeCount] = useState<number>(3);
   const [gameLost, setGameLost] = useState<boolean>(false);
   const [gameWon, setGameWon] = useState<boolean>(false);
@@ -34,24 +33,18 @@ function App() {
     setGameLost(false);
     setLifeCount(3)
   };
-  const verifyBoard = () => {
-    if (!verify && !gameWon) {  // Add check to prevent multiple verifications
+  const showHint = () => {
+    if (!gameWon) {  // Add check to prevent multiple verifications
       if (lifeCount > 0) {
-        setVerify(true);
         setLifeCount(prev => prev - 1);
-        setTimeout(() => {
-          setVerify(false);
-        }, 3000);
+      }else{
+        toast({
+          description: "Sorry, You are out of lives.",
+        })
       }
     }
   };
-  useEffect(() => {
-    if (lifeCount === 0 && verify) {
-      toast({
-        description: "Sorry, You are out of lives.",
-      })
-    }
-  }, [lifeCount, verify])
+  
   return (
     <main className="w-full h-full">
       <motion.div
@@ -83,7 +76,6 @@ function App() {
           gameReset: false,
           history: [],
           lifeCount: lifeCount,
-          verify: verify,
           gameLost: gameLost,
           setGameWon: setGameWon
         }}
@@ -113,9 +105,9 @@ function App() {
                   <Heart />
                 </div>
                 <Button
-                  onClick={verifyBoard}
+                  onClick={showHint}
                   variant="secondary"
-                >Check Solution<RefreshCw /></Button>
+                >Show Hint<Lightbulb /></Button>
               </div>
             </>
           )}
