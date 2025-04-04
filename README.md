@@ -5,7 +5,7 @@ This is a Sudoku game built with **React**, **TypeScript**, and **Vite**. It pro
 
 ## Features
 
-- **Difficulty Levels**: Choose between Easy, Medium, and Hard levels.
+- **Difficulty Levels**: Choose between Baby(shows errors while filling columns), Easy, Medium, and Hard levels.
 - **Timer**: Track how long it takes to solve the puzzle.
 - **Score Tracking**: View your previous game scores.
 - **Theme Toggle**: Switch between light and dark themes.

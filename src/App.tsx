@@ -13,7 +13,7 @@ import { motion } from 'motion/react';
 import Themetoggle from './components/ui/theme-toggle';
 import HighScores from './components/highscore';
 function App() {
-  const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
+  const [difficulty, setDifficulty] = useState<'baby' |'easy' | 'medium' | 'hard'>('easy');
   const [puzzle, setPuzzle] = useState<string>('');
   const [solution, setSolution] = useState<string>('');
   const [lifeCount, setLifeCount] = useState<number>(3);

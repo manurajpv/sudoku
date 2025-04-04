@@ -18,6 +18,10 @@ import { Button } from './button'
 import { GameContext } from '@/context/gameContext'
 const difficulties = [
   {
+    value: "baby",
+    label: "Baby",
+  },
+  {
     value: "easy",
     label: "Easy",
   },
@@ -30,7 +34,7 @@ const difficulties = [
     label: "Hard",
   },
 ]
-function DifficultyDropdown({ setDifficulty }: { setDifficulty: React.Dispatch<React.SetStateAction<"easy" | "medium" | "hard">> }) {
+function DifficultyDropdown({ setDifficulty }: { setDifficulty: React.Dispatch<React.SetStateAction<"baby" |"easy" | "medium" | "hard">> }) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState('easy')
   const game = useContext(GameContext)
@@ -38,7 +42,7 @@ function DifficultyDropdown({ setDifficulty }: { setDifficulty: React.Dispatch<R
     throw new Error('GameContext is undefined. Ensure the context provider is set.');
   }
   useEffect(() => {
-    game.difficulty = value as "easy" | "medium" | "hard"
+    game.difficulty = value as "baby" | "easy" | "medium" | "hard"
   }, [value])
   return (
     <Popover open={open} onOpenChange={setOpen}>

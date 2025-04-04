@@ -1,6 +1,6 @@
 export interface GameContextType {
-  difficulty: 'easy' | 'medium' | 'hard';
-  setDifficulty: (difficulty: 'easy' | 'medium' | 'hard') => void;
+  difficulty: 'baby' |'easy' | 'medium' | 'hard';
+  setDifficulty: (difficulty: 'baby' | 'easy' | 'medium' | 'hard') => void;
   startDate: number;
   board: string[];
   solution: string[];
